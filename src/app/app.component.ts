@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from './user/user';
 import { UserService } from './user/user.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +12,7 @@ export class AppComponent implements OnInit {
   title = 'angular-http';
 
   user: User;
-  users: User;
+  users: User[];
   username: string;
   id: string;
 
@@ -21,6 +22,19 @@ export class AppComponent implements OnInit {
     this.userService.getUser('1').subscribe(
       (res) => {
         this.user = res[0];
+      },
+      (err) => {
+        this.userService.handleError(err);
+      }
+    );
+
+    this.userService.getUsers()
+      .pipe(
+        tap((res) => console.log('getUser response here!', res))
+      )
+      .subscribe(
+      (res) => {
+        this.users = res;
       },
       (err) => {
         this.userService.handleError(err);
