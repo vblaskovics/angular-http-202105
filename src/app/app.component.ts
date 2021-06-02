@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from './user/user';
 import { UserService } from './user/user.service';
-import { tap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -30,9 +31,36 @@ export class AppComponent implements OnInit {
 
     this.userService.getUsers()
       .pipe(
-        tap((res) => console.log('getUser response here!', res))
+        tap((res) => console.log('getUser response here!', res)),
+        catchError((res) => {
+          return of([{
+            id: 0,
+            name: '-',
+            username: '-',
+            email: '-'
+          }])
+        })
       )
       .subscribe(
+      (res) => {
+        this.users = res;
+      },
+      (err) => {
+        this.userService.handleError(err);
+      }
+    );
+
+  }
+
+  onQuery(): void {
+    let query: any = {};
+    if(this.id) {
+      query.id = this.id;
+    }
+    if(this.username) {
+      query.username = this.username;
+    }
+    this.userService.getUserQuery(query).subscribe(
       (res) => {
         this.users = res;
       },

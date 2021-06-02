@@ -3,11 +3,11 @@
 <form class="ui form container">
   <div class="field">
     <label for="id">Id</label>
-    <input id="id" name="id" type="text" [(ngModel)]="id">
+    <input id="id" name="id" type="text" [(ngModel)]="id" (change)="onQuery()">
   </div>
   <div class="field">
     <label for="username">Username</label>
-    <input id="username" name="username" type="text" [(ngModel)]="username">
+    <input id="username" name="username" type="text" [(ngModel)]="username" (change)="onQuery()">
   </div>
 </form>
 
